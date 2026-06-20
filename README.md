@@ -5,20 +5,6 @@ Sistem klasifikasi otomatis untuk membedakan sayur dan buah **Segar (Fresh)** vs
 
 ---
 
-## Hasil Model
-
-| Model | Accuracy | F1 Score | Latency |
-|-------|----------|----------|---------|
-| **SVM (RBF, C=10)** | **91.1%** | **91.1%** | **3.61 ms** |
-| KNN (k=3) | 90.0% | 90.0% | 11.42 ms |
-| Random Forest (n=200) | 85.8% | 85.8% | 25.87 ms |
-| Logistic Regression (baseline) | 75.3% | 75.2% | 2.54 ms |
-
-- Dataset: 8,387 gambar × 7 item (Apple, Banana, Orange, Carrot, Cucumber, Potato, Tomato)
-- Feature extraction: HOG 128×128 + Color Histogram (HSV) + foreground mask
-- Dimensionality reduction: StandardScaler → PCA(100)
-- Semua model memenuhi target latency **< 100 ms** ✅
-
 ---
 
 ## Instalasi
