@@ -1,0 +1,9 @@
+data/raw/
+data/processed/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.env
+
+# Model terlalu besar untuk GitHub (>100MB)
+models/rf_model.pkl
