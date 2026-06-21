@@ -80,7 +80,7 @@ MODEL_CONFIGS = [
 
 st.set_page_config(
     page_title="ML Freshness Classifier",
-    page_icon="🌿",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -187,7 +187,7 @@ def classify_all(img_path, models, scaler, pca):
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🌿 ML Freshness")
+    st.markdown("## ML Freshness")
     st.caption("Klasifikasi Kesegaran Sayur & Buah")
     st.divider()
 
@@ -196,15 +196,6 @@ with st.sidebar:
         "HOG + Color Histogram → StandardScaler → PCA(100) → Model",
         help="Foreground mask diterapkan sebelum ekstraksi histogram warna."
     )
-    st.divider()
-
-    st.markdown("**Model (ranked by accuracy)**")
-    for cfg in MODEL_CONFIGS:
-        st.markdown(
-            f"<span style='color:{cfg['rank_color']};font-weight:700;'>#{cfg['rank']}</span> "
-            f"{cfg['display']} — **{cfg['train_acc']}%**",
-            unsafe_allow_html=True,
-        )
     st.divider()
 
     st.markdown("**Item yang Didukung**")
@@ -302,41 +293,3 @@ for col, cfg in zip(cols, MODEL_CONFIGS):
         </div>
         """, unsafe_allow_html=True)
 
-st.caption("* SVM: keyakinan via sigmoid(decision_function), bukan probabilitas kalibrasi.")
-
-# ── Performance table ─────────────────────────────────────────────────────────
-st.divider()
-st.subheader("Perbandingan Performa Model")
-st.caption("Diukur pada test set (20% data). Latency = inferensi saja, tanpa ekstraksi fitur (~7 ms).")
-
-df = pd.DataFrame([
-    {
-        "Rank":         f"#{cfg['rank']}",
-        "Model":        cfg["display"],
-        "Accuracy (%)": cfg["train_acc"],
-        "F1 Score (%)": cfg["train_f1"],
-        "Latency (ms)": cfg["train_lat_ms"],
-    }
-    for cfg in MODEL_CONFIGS
-])
-
-st.dataframe(
-    df,
-    hide_index=True,
-    use_container_width=True,
-    column_config={
-        "Rank":         st.column_config.TextColumn(width=70),
-        "Model":        st.column_config.TextColumn(width="medium"),
-        "Accuracy (%)": st.column_config.NumberColumn("Accuracy", format="%.1f %%", width=110),
-        "F1 Score (%)": st.column_config.NumberColumn("F1 Score", format="%.1f %%", width=110),
-        "Latency (ms)": st.column_config.NumberColumn("Latency",  format="%.2f ms", width=110),
-    },
-)
-
-# ── Model analysis ────────────────────────────────────────────────────────────
-st.divider()
-st.subheader("Analisis Model")
-
-for cfg in MODEL_CONFIGS:
-    with st.expander(f"#{cfg['rank']} · {cfg['display']} — {cfg['train_acc']}% acc · {cfg['train_lat_ms']} ms"):
-        st.markdown(cfg["desc"])
