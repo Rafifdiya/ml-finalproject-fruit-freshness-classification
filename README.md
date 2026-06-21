@@ -48,6 +48,25 @@ Buka browser di `http://localhost:8501`
 
 ---
 
+## Limitasi
+
+- **Domain shift background:** Dataset berisi foto e-commerce dengan background putih. Foreground mask hanya mengecualikan pixel putih (S<30 & V>180) — foto dengan background non-putih (meja kayu, dinding, dll) dapat memengaruhi akurasi color histogram.
+- **7 item terbatas:** Model hanya dilatih untuk Apple, Banana, Orange, Carrot, Cucumber, Potato, Tomato. Item di luar daftar ini tidak dapat diklasifikasikan dengan andal.
+- **Tidak ada segmentasi objek:** Sistem tidak dapat mendeteksi lokasi buah/sayur dalam gambar — seluruh frame diasumsikan berisi satu objek.
+- **Akurasi klasikal ML:** Akurasi tertinggi 91.1% (SVM) — beberapa misklasifikasi pada gambar dengan pencahayaan ekstrem atau kondisi setengah busuk adalah hal yang normal.
+
+---
+
+## Future Work
+
+- **Background removal adaptif:** Implementasi segmentasi objek (GrabCut atau model ringan seperti `rembg`) agar color histogram tidak terkontaminasi background non-putih.
+- **Ekspansi item:** Tambah lebih banyak jenis sayur dan buah ke dataset training.
+- **Deteksi multi-objek:** Integrasikan object detection (YOLO atau sliding window) agar dapat memproses foto dengan beberapa buah sekaligus.
+- **Kalibrasi confidence SVM:** Gunakan `CalibratedClassifierCV` agar probabilitas SVM lebih akurat dibanding sigmoid(decision_function).
+- **Deployment cloud:** Deploy ke Streamlit Cloud atau HuggingFace Spaces agar dapat diakses tanpa instalasi lokal.
+
+---
+
 ## Catatan
 
 - `data/raw/` dan `data/processed/` tidak di-commit (dataset besar)
